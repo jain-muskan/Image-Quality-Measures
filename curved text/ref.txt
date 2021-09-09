@@ -1,0 +1,26 @@
+lefty = int((-x1*vy/vx) + y1)
+righty = int(((cols-x1)*vy/vx)+y1)
+        
+count = 0
+for pts in cnt:
+x , y = pts[0][0], pts[0][1]                
+if abs(y - y1 - slope*(x - x1)) > 3:
+count += 1
+
+
+""" img1 = erosion.copy()
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3))
+    thin = np.zeros(img1.shape,dtype='uint8')
+    
+    while (cv2.countNonZero(img1)!=0 ):
+        # Erosion
+        erode = cv2.erode(img1,kernel)
+        # Opening on eroded image
+        opening = cv2.morphologyEx(erode,cv2.MORPH_OPEN,kernel)
+        # Subtract these two
+        subset = erode - opening
+        # Union of all previous sets
+        thin = cv2.bitwise_or(subset,thin)
+        # Set the eroded image for next iteration
+        img1 = erode.copy()
+        cv2.imshow("thin",thin) """

@@ -1,0 +1,52 @@
+    #X, Y = np.meshgrid(xedges, yedges)
+
+""" xpos, ypos = np.meshgrid(xedges[:-1] + 0.25, yedges[:-1] + 0.25, indexing="ij")
+    xpos = xpos.ravel()
+    ypos = ypos.ravel()
+    zpos = 0
+
+    # Construct arrays with the dimensions for the 16 bars.
+    dx = dy = 0.5 * np.ones_like(zpos)
+    dz = hist.ravel()
+
+    ax.bar3d(xpos, ypos, zpos, dx, dy, dz, zsort='average') 
+    plt.plot(x,y)"""
+    #ax2.pcolormesh(X, Y, hist)
+
+
+
+avgw = math.ceil(np.mean(widths))
+    avgh = math.ceil(np.mean(heights))
+
+    total_area = broken_char_area = 0
+
+    for stat in stat_new :
+        x , y, w, h = stat[0] , stat[1], stat[2] , stat[3]
+        if w<= avgw  and h<= avgh :
+            total_area += w* h
+
+        if w> 0 and h > 0 and w<= 0.75*avgw and h <= 0.75*avgh :#and h - w<= 0.15*avgh and w- h <= 0.15 *avgw
+            broken_char_area += w* h 
+            cv2.rectangle(image1,(x,y),(x+w,y+h),(0,0,255),1)
+    
+    print("Direct calculation",broken_char_area,total_area,broken_char_area/total_area)
+    print(len(stats),len(sorted_stats))
+    print(avgw,avgh)
+    total_area = broken_char_area = 0
+    binx = biny = 100
+    fig = plt.figure()
+    ax1 = fig.subplots(1)
+    hist, xedges, yedges = np.histogram2d(widths, heights,bins=[binx,biny],range=[[0, avgw], [0, avgh]])
+
+    for i in range(1,binx):
+        for j in range(1,biny):
+            if hist[i][j] != 0 :
+                if i<= 0.75*binx and j <=0.75*biny : #and j-i <= 15 and i - j <= 15
+                    broken_char_area += i*j *hist[i][j]
+                total_area += i*j*hist[i][j]
+            
+    print("Through Histogram " + str(binx)+" x "+str(biny),broken_char_area,total_area,broken_char_area/total_area)    
+    cv2.imwrite("output-images/"+output_image_name +"_dir.jpg",image1)
+    
+    ax1.imshow(hist,interpolation='nearest',origin='low')
+    plt.show()
